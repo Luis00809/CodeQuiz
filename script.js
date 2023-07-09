@@ -32,21 +32,21 @@ let timeDisplay = document.querySelector('.timer');
 
 let question1 = {
     question: 'What is css?',
-    choice1: ['something','cool', 'item', 'answer'],
+    choices: ['something','cool', 'item', 'answer'],
     answer: 'item'
     
 };
 
 let question2 = {
     question: 'What is HTML?',
-    choice1: ['different', 'djdjd','markup', 'answer'],
+    choices: ['different', 'djdjd','markup', 'answer'],
     answer: 'different'
 
 };
 
 let question3 = {
     question: 'What is JS?',
-    choice1: ['APP','cool','item', 'answer'],
+    choices: ['APP','cool','item', 'answer'],
     answer: 'cool'
 
 };
@@ -54,7 +54,7 @@ let question3 = {
 
 let question4 = {
     question: 'What is abc?',
-    choice1: ['letters','random','item','answer'],
+    choices: ['letters','random','item','answer'],
     answer: 'answer'
 };
 
@@ -62,98 +62,57 @@ let questionOptions = [question1, question2, question3, question4];
 console.log(questionOptions);
 
 
-// questionOptions.forEach((question, index) => {
-//     let questionDisplay = document.createElement('p'); 
-//     questionDisplay.classList.add('card');
-//     let card = document.querySelector('.card');
-//     questionDisplay.textContent = questionOptions.question;
-//     card.appendChild(questionDisplay); 
 
-//     let button = document.createElement('button');
-//     button.setAttribute('type', 'button');
-//     button.setAttribute('id', 'choice' + (choiceIndex + 1));
-//     let correctChoice = choice === question.answer;
-//     if(correctChoice){
-//         button.setAttribute('data-choice', 'correct');
-//     } else {
-//         button.setAttribute('data-choice', 'wrong');
-//     }
-//     button.textContent = choice;
-//     card.appendChild(button);
-// })
 
 function startquiz() {
-    // event selector for clicking start button
+    let currentQuestionIndex = 0;
+
     startButton.addEventListener("click", function(){
         introRules.setAttribute('style', "display: none");
         questionCard.setAttribute('style', "display: flex");
-        startingQuestion.textContent = question1.question;
-        startchoice1.textContent = question1.choice1[0];
-        startchoice2.textContent = question1.choice1[1];
-        startchoice3.textContent = question1.choice1[2];
-        startchoice4.textContent = question1.choice1[3];
+        showQuestion(currentQuestionIndex);
+        switchQuestions();
         timer();
-
     })
 
-
-}
-
-
-function switchQuestions() {
-    answerChoice.addEventListener('click', function(event) {
-        let element = event.target;
-    if(element.dataset.choice === 'correct'){
-        switchToQuetion2();
-        // switchToQuetion4();
-
-    } else if(element.dataset.choice === 'wrong') {
-        secondsLeft -= 5;
+    function showQuestion (index) {
+        let question = questionOptions[index];
+        startingQuestion.textContent = question.question;
+            startchoice1.textContent = question.choices[0];
+            startchoice2.textContent = question.choices[1];
+            startchoice3.textContent = question.choices[2];
+            startchoice4.textContent = question.choices[3];
     }
+    console.log(startingQuestion.textContent);
 
+    function switchQuestions() {
+        answerChoice.addEventListener('click', function(event) {
+            let element = event.target;
+        if(element.textContent === questionOptions[currentQuestionIndex].answer){
+            currentQuestionIndex++;
+            if(currentQuestionIndex < questionOptions.length) {
+                showQuestion(currentQuestionIndex);
+            }
 
-
-})
+        } else if(element.textContent !== questionOptions[currentQuestionIndex].answer) {
+            secondsLeft -= 5;
+        }
+    })
+    }
 }
-
-
-
-startquiz();
-switchQuestions();
-
 
 function timer() {
     let timerInterval = setInterval(function(){
     secondsLeft--;
     timeDisplay.textContent = 'Time Left: ' + secondsLeft;
 
-    if(secondsLeft === 0) {
+    if(secondsLeft <= 0) {
+        timeDisplay.textContent = 'Time Left: 0';
         clearInterval(timerInterval);
     } 
 
     },1000);
 }
 
-function switchToQuetion2() {
-    startingQuestion.textContent = question2.question;
-        startchoice1.textContent = question2.choice1[0];
-        startchoice2.textContent = question2.choice1[1];
-        startchoice3.textContent = question2.choice1[2];
-        startchoice4.textContent = question2.choice1[3];
-}
 
-function switchToQuetion3() {
-    startingQuestion.textContent = question3.question;
-        startchoice1.textContent = question3.choice1[0];
-        startchoice2.textContent = question3.choice1[1];
-        startchoice3.textContent = question3.choice1[2];
-        startchoice4.textContent = question3.choice1[3];
-}
-
-function switchToQuetion4() {
-    startingQuestion.textContent = question4.question;
-        startchoice1.textContent = question4.choice1[0];
-        startchoice2.textContent = question4.choice1[1];
-        startchoice3.textContent = question4.choice1[2];
-        startchoice4.textContent = question4.choice1[3];
-}
+startquiz();
