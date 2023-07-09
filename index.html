@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Coding Quiz</title>
     <link rel="stylesheet" href="./assets/css/styles.css">
 </head>
 <body>
 
     <header>
         <h1 class="title">Code Quiz</h1>
-        <p class="timer">Time Left: </p>
+        <p class="timer"></p>
     </header>
 
     <main>
@@ -25,14 +25,14 @@
         <div class="hide">
             <div class="hide container">
                 <div class="card">
-                    <label class="question">Question Lorem, ipsum dolor sit amet consectetur adipisicing
+                    <p class="question">Question Lorem, ipsum dolor sit amet consectetur adipisicing
                         eligendi quaerat quasi?
-                    </label>
+                    </p>
                 
-                    <button type="button" id="choice1">answer 1</button>
-                    <button type="button" id="choice2">answer 2</button>
-                    <button type="button" id="choice3">answer 3</button>
-                    <button type="button" id="choice4">answer 4</button>
+                    <button type="button" id="choice1" data-choice="correct"></button>
+                    <button type="button" id="choice2" data-choice="wrong"></button>
+                    <button type="button" id="choice3" data-choice="wrong"></button>
+                    <button type="button" id="choice4" data-choice="wrong"></button>
                 </div>
                     
             </div>
