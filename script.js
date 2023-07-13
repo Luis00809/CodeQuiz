@@ -1,19 +1,3 @@
-// start with the start screen without displaying question & answer choices
-
-// on start screen display the rules with a start button
-
-// once start button is cliked, hide that original display
-
-// create time interval function
-
-// display question with answer choices 
-    // 1. create a function to display question when "start" button is clicked
-    // 2. fucntion for overriding question text
-    // 3. function for overriding answer choices
-    // 4.event operator for right and wrong answer choices
-
-// event operator for once a selection is made the next question appears
- 
 let startButton = document.querySelector("#start");
 let introRules = document.querySelector('.intro');
 let questionCard = document.querySelector(".hide");
@@ -29,40 +13,35 @@ let startchoice4 = document.querySelector('#choice4');
 let secondsLeft = 20;
 let timeDisplay = document.querySelector('.timer');
 
+let score = localStorage.getItem('score');
+timeDisplay.textContent = score;
 
 let question1 = {
     question: 'What is css?',
-    choices: ['something','cool', 'item', 'answer'],
-    answer: 'item'
-    
+    choices: ['something','cool', 'styling', 'answer'],
+    answer: 'styling'
 };
 
 let question2 = {
     question: 'What is HTML?',
     choices: ['different', 'djdjd','markup', 'answer'],
-    answer: 'different'
-
+    answer: 'markup'
 };
 
 let question3 = {
     question: 'What is JS?',
-    choices: ['APP','cool','item', 'answer'],
-    answer: 'cool'
-
+    choices: ['APP','logic','item', 'answer'],
+    answer: 'logic'
 };
-
 
 let question4 = {
     question: 'What is abc?',
-    choices: ['letters','random','item','answer'],
-    answer: 'answer'
+    choices: ['letters','random','item','something'],
+    answer: 'letters'
 };
 
 let questionOptions = [question1, question2, question3, question4];
 console.log(questionOptions);
-
-
-
 
 function startquiz() {
     let currentQuestionIndex = 0;
@@ -78,41 +57,56 @@ function startquiz() {
     function showQuestion (index) {
         let question = questionOptions[index];
         startingQuestion.textContent = question.question;
-            startchoice1.textContent = question.choices[0];
-            startchoice2.textContent = question.choices[1];
-            startchoice3.textContent = question.choices[2];
-            startchoice4.textContent = question.choices[3];
+        startchoice1.textContent = question.choices[0];
+        startchoice2.textContent = question.choices[1];
+        startchoice3.textContent = question.choices[2];
+        startchoice4.textContent = question.choices[3];
     }
     console.log(startingQuestion.textContent);
 
     function switchQuestions() {
         answerChoice.addEventListener('click', function(event) {
             let element = event.target;
-        if(element.textContent === questionOptions[currentQuestionIndex].answer){
-            currentQuestionIndex++;
-            if(currentQuestionIndex < questionOptions.length) {
-                showQuestion(currentQuestionIndex);
+            if(element.textContent === questionOptions[currentQuestionIndex].answer){
+                currentQuestionIndex++;
+                if(currentQuestionIndex < questionOptions.length) {
+                    showQuestion(currentQuestionIndex);
+                } else {
+                    endQuiz();
+                }
+            } else {
+                secondsLeft -= 5;
             }
+        })
+    }
 
-        } else if(element.textContent !== questionOptions[currentQuestionIndex].answer) {
-            secondsLeft -= 5;
-        }
-    })
+    function endQuiz() {
+        clearInterval(timerInterval);
+        localStorage.setItem('score', score);
+        window.location.href = "highscore.html?score=" + score;
+        // Add any additional logic for ending the quiz
     }
 }
 
+let timerInterval;
+
 function timer() {
-    let timerInterval = setInterval(function(){
-    secondsLeft--;
-    timeDisplay.textContent = 'Time Left: ' + secondsLeft;
-
-    if(secondsLeft <= 0) {
-        timeDisplay.textContent = 'Time Left: 0';
-        clearInterval(timerInterval);
-    } 
-
-    },1000);
+    timerInterval = setInterval(function(){
+        secondsLeft--;
+        timeDisplay.textContent = 'Time Left: ' + secondsLeft;
+        score = secondsLeft;
+        
+        if(secondsLeft <= 0) {
+            timeDisplay.textContent = 'Time Left: 0';
+            clearInterval(timerInterval);
+            localStorage.setItem('score', score);
+            endQuiz();
+        }
+    }, 1000);
 }
 
+console.log(score);
 
 startquiz();
+
+
